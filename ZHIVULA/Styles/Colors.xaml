@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ZHIVULA.Styles">
+    <!--Ярко-бирюзовый-->
+    <SolidColorBrush x:Key="BrightTurquoiseBrush" Color="#08E8DE"/>
+    <Color x:Key="BrightTurquoiseColor">#08E8DE</Color>
+
+    <!--Бирюзово-голубой Крайола-->
+    <SolidColorBrush x:Key="LightBrightTurquoiseBrush" Color="#77DDE7"/>
+    <Color x:Key="LightBrightTurquoiseColor">#77DDE7</Color>
+
+    <!--Красный (для ошибок)-->
+    <SolidColorBrush x:Key="ErrorBrush" Color="#CC0605"/>
+    <Color x:Key="ErrorColor">#CC0605</Color>
+
+    <!--Белый-->
+    <SolidColorBrush x:Key="WhiteBrush" Color="#FFF"/>
+    <Color x:Key="WhiteColor">#FFF</Color>
+</ResourceDictionary>

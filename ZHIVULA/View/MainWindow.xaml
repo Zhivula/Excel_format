@@ -1,0 +1,52 @@
+﻿<Window x:Class="ZHIVULA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZHIVULA"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="250" Width="700">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <StackPanel.Background>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStopCollection>
+                        <GradientStop Offset="0" Color="#240935"/>
+                        <GradientStop Offset="1" Color="#20155E"/>
+                    </GradientStopCollection>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <RadioButton Style="{DynamicResource MenuButton}" Command="{Binding Block_1_Command}">
+                <StackPanel Orientation="Horizontal" Margin="10 5 0 5">
+                    <materialDesign:PackIcon Margin="0 0 10 0" Name="md_first" Kind="Database" Foreground="{DynamicResource LightBrightTurquoiseBrush}" Height="25" Width="25" VerticalAlignment="Center"/>
+                    <TextBlock Text="БЛОК 1" Style="{DynamicResource Menu}"/>
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{DynamicResource MenuButton}" Command="{Binding Block_2_Command}">
+                <StackPanel Orientation="Horizontal" Margin="10 5 0 5">
+                    <materialDesign:PackIcon Margin="0 0 10 0" Kind="Database" Foreground="{DynamicResource LightBrightTurquoiseBrush}" Height="{Binding ElementName=md_first, Path=Height}" Width="{Binding ElementName=md_first, Path=Width}" VerticalAlignment="Center"/>
+                    <TextBlock Text="БЛОК 2" Style="{DynamicResource Menu}"/>
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{DynamicResource MenuButton}" Command="{Binding MailCommand}">
+                <StackPanel Orientation="Horizontal" Margin="10 5 0 5">
+                    <materialDesign:PackIcon Kind="Folder" Margin="0 0 10 0" Foreground="{DynamicResource LightBrightTurquoiseBrush}" Height="{Binding ElementName=md_first, Path=Height}" Width="{Binding ElementName=md_first, Path=Width}" VerticalAlignment="Center"/>
+                    <TextBlock Text="НАРЯДЫ" Style="{DynamicResource Menu}"/>
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{DynamicResource MenuButton}" Command="{Binding SettingsCommand}">
+                <StackPanel Orientation="Horizontal" Margin="10 5 0 5">
+                    <materialDesign:PackIcon Kind="Settings" Margin="0 0 10 0" Foreground="{DynamicResource LightBrightTurquoiseBrush}" Height="{Binding ElementName=md_first, Path=Height}" Width="{Binding ElementName=md_first, Path=Width}" VerticalAlignment="Center"/>
+                    <TextBlock Text="НАСТРОЙКИ" Style="{DynamicResource Menu}"/>
+                </StackPanel>
+            </RadioButton>
+        </StackPanel>
+        <Grid Grid.Column="1" x:Name="ChangedGrid">
+        </Grid>
+    </Grid>
+</Window>
