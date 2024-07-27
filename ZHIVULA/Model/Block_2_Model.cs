@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ZHIVULA.DataBase;
+using ZHIVULA.Data;
 
 namespace ZHIVULA.Model
 {
@@ -17,52 +17,24 @@ namespace ZHIVULA.Model
         }
         public int Count()
         {
-            using (var context = new MyDbContext())
-            {
-                if (context.Cell_2 != null)
-                {
-                    return context.Cell_2.Count();
-                }
-                else return 0;
-            }
+            return Block_2.GetInstance().Count;
         }
         public List<string> GetBuildingFull()
         {
-            using (var context = new MyDbContext())
-            {
-                if (context.Cell_2.Count() > 0)
-                {
-                    return context.Cell_2.Select(x => x.Building).ToList();
-                }
-                else return new List<string>();
-            }
+            return Block_2.GetInstance().Building;
         }
         public List<string> GetBuilding()
         {
-            using (var context = new MyDbContext())
-            {
-                if (context.Cell_2.Count() > 0)
-                {
-                    var list = context.Cell_2.Select(x => x.Building);
-                    return list.Distinct().ToList();
-                }
-                else return new List<string>();
-            }
+            var list = Block_2.GetInstance().Building;
+            return list.Distinct().ToList();
         }
         public List<string> GetKKS()
         {
-            using (var context = new MyDbContext())
-            {
-                if (context.Cell_2.Count() > 0)
-                {
-                    return context.Cell_2.Select(x => x.KKS).ToList();
-                }
-                else return new List<string>();
-            }
+            return Block_2.GetInstance().KKS;
         }
         public List<string> Format(List<string> list)
         {
-            return list.Where(x => x[x.Length - 3] == 'B' || x[x.Length - 3] == 'В' && char.IsDigit(x[x.Length - 5]) == true).ToList();
+            return list.Where(x => (x[x.Length - 3] == 'B' || x[x.Length - 3] == 'В') && (char.IsDigit(x[x.Length - 5]) == true)).ToList();
         }
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,7 +1,9 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,7 +12,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using ZHIVULA.Data;
-using ZHIVULA.DataBase;
 using ZHIVULA.Model;
 using ZHIVULA.Properties;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -19,6 +20,16 @@ namespace ZHIVULA.ViewModel
 {
     class Block_1_ViewModel : INotifyPropertyChanged, IBlockViewModel
     {
+        private ObservableCollection<Room> rooms;
+        public ObservableCollection<Room> Rooms
+        {
+            get => rooms;
+            set
+            {
+                rooms = value;
+                OnPropertyChanged(nameof(Rooms));
+            }
+        }
         private List<string> building;
         public List<string> Building
         {
@@ -59,14 +70,15 @@ namespace ZHIVULA.ViewModel
                 OnPropertyChanged(nameof(ListB));
             }
         }
-        private string selectedItem;
-        public string SelectedItem
+        private string selectedItem_Building;
+        public string SelectedItem_Building
         {
-            get => selectedItem;
+            get => selectedItem_Building;
             set
             {
-                selectedItem = value;
-                OnPropertyChanged(nameof(SelectedItem));
+                selectedItem_Building = value;
+                OnPropertyChanged(nameof(SelectedItem_Building));
+                UpdateRooms();
             }
         }
         private string selectedItem_ListB;
@@ -141,6 +153,8 @@ namespace ZHIVULA.ViewModel
         }
         private Block_1_Model model;
 
+        public DelegateCommand GetData { get; set; }
+
         public Block_1_ViewModel()
         {
             model = new Block_1_Model();
@@ -149,12 +163,13 @@ namespace ZHIVULA.ViewModel
             BuildingFull = new List<string>();
             Number_B = new List<string>();
             ListB = new List<string>();
+            Rooms = new ObservableCollection<Room>();
             if (model.Count() > 0)
             {
                 BuildingFull = model.GetBuildingFull();
                 Building = model.GetBuilding();
                 Number_B = model.GetKKS();
-                SelectedItem = Building.FirstOrDefault();
+                selectedItem_Building = Building.FirstOrDefault();
                 Icon = PackIconKind.CheckCircle;
                 IconForeground = new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#00E676"));
             }
@@ -163,15 +178,25 @@ namespace ZHIVULA.ViewModel
                 Icon = PackIconKind.CloseCircle;
                 IconForeground = new SolidColorBrush(Color.FromRgb(255, 0, 0));
             }
+            GetData = new DelegateCommand(o => { GetDataMethod(); });
         }
         public ICommand GetB => new DelegateCommand(o =>
         {
             var list = new List<string>();
-            if (SelectedItem != null)
+
+            var rooms = Block_1.GetInstance().Room;
+            var rooms_cheched = new List<string>();
+
+            foreach (var item in Rooms)
             {
-                for (var i = 0; i < BuildingFull.Count(); i++)
+                if (item.Checked) rooms_cheched.Add(item.Text);
+            }
+
+            if (selectedItem_Building != null)
+            {
+                for (var i = 0; i < rooms.Count(); i++)
                 {
-                    if (BuildingFull[i] == SelectedItem)
+                    if (rooms_cheched.Contains(rooms[i]))
                     {
                         list.Add(Number_B[i]);
                     }
@@ -182,7 +207,7 @@ namespace ZHIVULA.ViewModel
             SelectedItem_ListB = ListB.FirstOrDefault();
             WindowSuccessfullyViewModel.Successfully();
         });
-        public ICommand GetData => new DelegateCommand(o =>
+        public void GetDataMethod()
         {
             var dlg = new Microsoft.Win32.OpenFileDialog
             {
@@ -199,7 +224,7 @@ namespace ZHIVULA.ViewModel
                 PathFile = dlg.FileName;
                 GetDataExcel(PathFile);
             }
-        });
+        }
         public ICommand WhiteBirkiInFile => new DelegateCommand(o =>
         {
             var dlg = new Microsoft.Win32.OpenFileDialog
@@ -233,15 +258,16 @@ namespace ZHIVULA.ViewModel
             if (result == true)
             {
                 PathFile = dlg.FileName;
-                using (var context = new MyDbContext())
-                {
-                    context.Cell_1.RemoveRange(context.Cell_1.ToList());
-                    context.SaveChanges();
-                }
+
                 GetDataExcel_2(PathFile);
                 WindowSuccessfullyViewModel.Successfully();
             }
         });
+
+        /// <summary>
+        /// Этот метод перезаписывает(обновляет) данные из Excel(ВОР СКУПЗ)
+        /// </summary>
+        /// <param name="path"></param>
         private void GetDataExcel_2(string path)
         {
             new Thread(() => {
@@ -256,45 +282,61 @@ namespace ZHIVULA.ViewModel
                 int rowCount = UsedRange.Rows.Count;
                 int colCount = UsedRange.Columns.Count;
 
-                using (var context = new MyDbContext())
+                UpdateStackPanel = Visibility.Visible;
+                UpdateCell_All = rowCount;
+                Console.WriteLine(rowCount);
+                // полная перезапись файла 
+                using (StreamWriter writer = new StreamWriter(@"Block_1.txt", false))
                 {
-                    if (context.Cell_1.Count() == 0)
+                    for (int i = 1; i <= rowCount; i++)
                     {
-                        UpdateStackPanel = Visibility.Visible;
-                        UpdateCell_All = rowCount;
-
-                        for (int i = 1; i <= rowCount; i++)
+                        if (UsedRange.Cells[i, 4] != null && UsedRange.Cells[i, 4].Value2 != null)
                         {
-                            if (UsedRange.Cells[i, 4] != null && UsedRange.Cells[i, 4].Value2 != null &&
-                                UsedRange.Cells[i, 10] != null && UsedRange.Cells[i, 10].Value2 != null &&
-                                UsedRange.Cells[i, 20] != null && UsedRange.Cells[i, 20].Value2 != null &&
-                                UsedRange.Cells[i, 21] != null && UsedRange.Cells[i, 21].Value2 != null &&
-                                UsedRange.Cells[i, 22] != null && UsedRange.Cells[i, 22].Value2 != null)
+                            if (UsedRange.Cells[i, 20] == null || UsedRange.Cells[i, 20].Value2 == null)
                             {
-                                context.Cell_1.Add(new Cell_1()
-                                {
-                                    KKS = UsedRange.Cells[i, 4].Value2.ToString(),
-                                    Date = UsedRange.Cells[i, 10].Value2.ToString(),
-                                    Shleif = UsedRange.Cells[i, 20].Value2.ToString(),
-                                    Building = UsedRange.Cells[i, 21].Value2.ToString(),
-                                    Room = UsedRange.Cells[i, 22].Value2.ToString()
-                                });
+                                UsedRange.Cells[i, 20].Value2 = "-";
                             }
-                            UpdateCell_inProcess = i;
+                            if (UsedRange.Cells[i, 21] == null || UsedRange.Cells[i, 21].Value2 == null)
+                            {
+                                UsedRange.Cells[i, 21].Value2 = "-";
+                            }
+                            if (UsedRange.Cells[i, 22] == null || UsedRange.Cells[i, 22].Value2 == null)
+                            {
+                                UsedRange.Cells[i, 22].Value2 = "-";
+                            }
+                            //4-KKS
+                            //10-Date
+                            //20-Shleif
+                            //21-Building
+                            //22-Room
+                            writer.WriteLineAsync(
+                                UsedRange.Cells[i, 4].Value2.ToString() + "&"
+                                + UsedRange.Cells[i, 20].Value2.ToString() + "&"
+                                + UsedRange.Cells[i, 21].Value2.ToString() + "&"
+                                + UsedRange.Cells[i, 22].Value2.ToString()
+                                );
                         }
-                        context.SaveChanges();
+                        UpdateCell_inProcess = i;
                     }
                 }
                 xlWorkbook.Close();
                 xlApp.Quit();
                 UpdateStackPanel = Visibility.Hidden;
+
+
+                Block_1.GetInstance().UpDate();//уведомляем, что изменились данные в файле
+
+                BuildingFull = model.GetBuildingFull();
+                Number_B = model.GetKKS();
+                Building = model.GetBuilding();
             }).Start();
-
-
-            BuildingFull = model.GetBuildingFull();
-            Number_B = model.GetKKS();
-            Building = model.GetBuilding();
+            WindowSuccessfullyViewModel.Successfully();
         }
+        /// <summary>
+        /// Вписывает форматированные строки - это уже готовые бирки
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="dataList"></param>
         private void GetDataExcel(string path, List<string> dataList = null)
         {
             Excel.Application xlApp = new Excel.Application();
@@ -319,8 +361,6 @@ namespace ZHIVULA.ViewModel
             }
             else if (ListB != null) list = ListB;
 
-            int t = 0;
-
             var xlSheets = xlWorkbook.Sheets as Excel.Sheets;
             var xlNewSheet = (Excel.Worksheet)xlSheets.Add(xlSheets[1], Type.Missing, Type.Missing, Type.Missing);
             xlNewSheet.Name = "Бирки от Владоса";
@@ -328,34 +368,62 @@ namespace ZHIVULA.ViewModel
             Excel.Range newRange = newSheet.UsedRange;
             xlNewSheet.Activate();
 
-            for (int i = 1; i <= list.Count() / 3; i++)
+            int k = 0;
+            int y = 1;
+            int l = 1;
+
+            while (k != list.Count())
             {
-                for (int j = 1; j <= 3; j++)
+                if (list[k].Length > 6) newRange.Cells[l, y].Value2 = list[k].Substring(5);//откидываем первых 5 символов
+
+                newRange.Cells[l, y].Characters[1, 2].Font.Size = (int)Settings.Default["Position_1"];
+                newRange.Cells[l, y].Characters[3, 2].Font.Size = (int)Settings.Default["Position_2"];
+                newRange.Cells[l, y].Characters[5, 4].Font.Size = (int)Settings.Default["Position_3"];
+                newRange.Cells[l, y].Characters[9, 1].Font.Size = (int)Settings.Default["Position_4"];
+                newRange.Cells[l, y].Characters[10, 2].Font.Size = (int)Settings.Default["Position_5"];
+                newRange.Cells[l, y].ColumnWidth = (double)Settings.Default["Width"];
+                newRange.Cells[l, y].RowHeight = (double)Settings.Default["Height"];
+                newRange.Cells[l, y].HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+                newRange.Cells[l, y].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+                newRange.Cells[l, y].WrapText = true;
+                newRange.Cells[l, y].Font.Name = (string)Settings.Default["FontName"];
+                newRange.Cells[l, y].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+                k++;
+                y++;
+
+                if (k % (int)Settings.Default["CountWidth"] == 0)
                 {
-                    var b = list[t];
-                    if (b.Length > 6)
-                    {
-                        string newB = b.Substring(5);
-                        newRange.Cells[i, j].Value2 = newB;
-                    }
-                    newRange.Cells[i, j].Characters[1, 2].Font.Size = 48;
-                    newRange.Cells[i, j].Characters[3, 2].Font.Size = 26;
-                    newRange.Cells[i, j].Characters[5, 4].Font.Size = 48;
-                    newRange.Cells[i, j].Characters[9, 1].Font.Size = 36;
-                    newRange.Cells[i, j].Characters[10, 2].Font.Size = 90;
-                    newRange.Cells[i, j].ColumnWidth = (double)Settings.Default["Width"];
-                    newRange.Cells[i, j].RowHeight = (double)Settings.Default["Height"];
-                    newRange.Cells[i, j].HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
-                    newRange.Cells[i, j].VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
-                    newRange.Cells[i, j].WrapText = true;
-                    newRange.Cells[i, j].Font.Name = "Times New Roman";
-                    newRange.Cells[i, j].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-                    t++;
+                    y = 1;
+                    l++;
                 }
             }
             xlWorkbook.Close();
             xlApp.Quit();
             WindowSuccessfullyViewModel.Successfully();
+        }
+        public void UpdateRooms()
+        {
+            Rooms.Clear();
+            var building = Block_1.GetInstance().Building;
+            var rooms = Block_1.GetInstance().Room;
+            var bag = new List<string>();
+            for (var i = 0; i < building.Count; i++)
+            {
+                if (building[i] == SelectedItem_Building)
+                {
+                    bag.Add(rooms[i]);
+                }
+            }
+            bag = bag.Distinct().OrderBy(x => x).ToList();
+            foreach (var item in bag)
+            {
+                Rooms.Add(new Room()
+                {
+                    Text = item,
+                    Checked = false
+                });
+            }
         }
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

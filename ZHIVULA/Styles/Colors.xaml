@@ -16,4 +16,11 @@
     <!--Белый-->
     <SolidColorBrush x:Key="WhiteBrush" Color="#FFF"/>
     <Color x:Key="WhiteColor">#FFF</Color>
+
+    <SolidColorBrush x:Key="DarkBaseBrush" Color="#1826FF"/>
+    <Color x:Key="DarkBaseColor">#1826FF</Color>
+
+    <SolidColorBrush x:Key="DarkTextBrush" Color="#000880"/>
+    <Color x:Key="DarkTextColor">#000880</Color>
+    
 </ResourceDictionary>

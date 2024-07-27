@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZHIVULA.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="525">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -40,5 +40,73 @@
                 </ControlTemplate>
             </TextBox.Template>
         </TextBox>
+        <Label Grid.Column="0" Grid.Row="2"  Content="Количество в ряду" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Grid.Row="2"  Text="{Binding CountWidth, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 20 0" Background="White" Height="26">
+            <TextBox.Template>
+                <ControlTemplate>
+                    <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                        <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </TextBox.Template>
+        </TextBox>
+        <Label Grid.Column="0" Grid.Row="3"  Content="Шрифт" VerticalAlignment="Center"/>
+        <TextBox Grid.Column="1" Grid.Row="3"  Text="{Binding FontName, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 20 0" Background="White" Height="26">
+            <TextBox.Template>
+                <ControlTemplate>
+                    <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                        <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                    </Border>
+                </ControlTemplate>
+            </TextBox.Template>
+        </TextBox>
+        <Label Grid.Column="0" Grid.Row="4" Content="Размер шрифта" VerticalAlignment="Center"/>
+        <WrapPanel Grid.Column="1" Grid.Row="4" ItemWidth="76" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBox Text="{Binding Position_1, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 10 0" Background="White" Height="26">
+                <TextBox.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
+            <TextBox Text="{Binding Position_2, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 10 0" Background="White" Height="26">
+                <TextBox.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
+            <TextBox Text="{Binding Position_3, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 10 0" Background="White" Height="26">
+                <TextBox.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
+            <TextBox Text="{Binding Position_4, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 10 0" Background="White" Height="26">
+                <TextBox.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
+            <TextBox Text="{Binding Position_5, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Padding="3 0 0 0" Margin="0 0 10 0" Background="White" Height="26">
+                <TextBox.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="5"  BorderThickness="1" BorderBrush="#FF468AFF" Background="White">
+                            <ScrollViewer Margin="0" x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
+        </WrapPanel>
     </Grid>
 </UserControl>

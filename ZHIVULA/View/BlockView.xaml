@@ -6,13 +6,102 @@
              xmlns:local="clr-namespace:ZHIVULA.View"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="250" d:DesignWidth="700">
+             d:DesignHeight="400" d:DesignWidth="820">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Border CornerRadius="5"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="25" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border x:Name="Border" Grid.ColumnSpan="2" CornerRadius="5" Background="{DynamicResource DarkBaseBrush}" BorderBrush="White" BorderThickness="1"/>
+                    <Border Grid.Column="0" CornerRadius="0" Margin="7 7 0 7" Background="{DynamicResource DarkBaseBrush}" BorderBrush="White" BorderThickness="0,0,1,0"/>
+                    <Path x:Name="Arrow" Grid.Column="1" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"/>
+                </Grid>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="{DynamicResource Regular}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton 
+                            Name="ToggleButton" 
+                            Template="{StaticResource ComboBoxToggleButton}" 
+                            Grid.Column="2" 
+                            Focusable="false"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press"
+                                FontSize="{DynamicResource Regular}">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="10,5,10,5"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"/>
+                            <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+
+                                <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder" Background="{DynamicResource DarkBaseBrush}" CornerRadius="5" BorderThickness="1" BorderBrush="{DynamicResource LightBaseBrush}"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- SimpleStyles: ComboBoxItem -->
+        <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="{DynamicResource Regular}"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border Name="Border"
+                              Padding="5"
+                              SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource DarkTextBrush}"/>
+                                <Setter TargetName="Border" Property="CornerRadius" Value="5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -27,26 +116,40 @@
                 </StackPanel>
             </Button>
             <StackPanel Visibility="{Binding UpdateStackPanel}" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Margin="10 0 0 0">
-                <TextBlock Text="{Binding UpdateCell_All, UpdateSourceTrigger=PropertyChanged}" FontSize="25" Foreground="#170F11"/>
-                <TextBlock Text="/" FontSize="25" Foreground="#170F11" />
-                <TextBlock Text="{Binding UpdateCell_inProcess, UpdateSourceTrigger=PropertyChanged}" FontSize="25" Foreground="#170F11"/>
+                <TextBlock Text="{Binding UpdateCell_All, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Foreground="#170F11"/>
+                <TextBlock Text="/" FontSize="18" Foreground="#170F11" />
+                <TextBlock Text="{Binding UpdateCell_inProcess, UpdateSourceTrigger=PropertyChanged}" FontSize="18" Foreground="#170F11"/>
             </StackPanel>
         </StackPanel>
-        <Button Grid.Row="4" Width="250" Style="{DynamicResource ADD_Button}" Command="{Binding GetData}">
-            <StackPanel Orientation="Horizontal">
-                <materialDesign:PackIcon Kind="OpenInApp" Foreground="White" Height="25" Width="25"/>
-                <TextBlock Text="Файл с заготовкой" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="16"/>
-            </StackPanel>
-        </Button>
-        <ComboBox Width="250" ItemsSource="{Binding Building, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0" Margin="5" VerticalAlignment="Center"/>
-        <Button Grid.Row="1" Grid.Column="1" Width="250" Style="{DynamicResource ADD_Button}" Command="{Binding GetB}" Background="BlueViolet">
+        <StackPanel Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Orientation="Vertical">
+            <Label Content="Выбери здание:" Foreground="Black" FontSize="{DynamicResource Regular}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <ComboBox Width="130" ItemsSource="{Binding Building, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem_Building, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+        </StackPanel>
+        
+        <Grid Grid.Column="1" Grid.RowSpan="5">
+            <ListView ScrollViewer.CanContentScroll="False" ItemsSource="{Binding Rooms, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding Checked}" VerticalAlignment="Center" Margin="0 5 0 0">
+                            <TextBlock Text="{Binding Text}" Margin="0 -5 0 0" Foreground="Black" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </CheckBox>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+        <Button Grid.Row="0" Grid.Column="2" Width="250" Style="{DynamicResource ADD_Button}" Command="{Binding GetB}" Background="BlueViolet">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="GetApp" Foreground="White" Height="25" Width="25"/>
                 <TextBlock Text="Получить бишки 'B-00'" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="16"/>
             </StackPanel>
         </Button>
-        <ComboBox Width="250" ItemsSource="{Binding ListB, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem_ListB, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" Margin="5" VerticalAlignment="Center"/>
-        <Button Grid.Row="4" Grid.Column="1" Width="250" Style="{DynamicResource ADD_Button}" Command="{Binding WhiteBirkiInFile}" Background="BlueViolet">
+        <ComboBox Width="250" ItemsSource="{Binding ListB, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem_ListB, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="1" Margin="5" VerticalAlignment="Top"/>
+        <Button Grid.RowSpan="5" Grid.Column="2" Width="250" VerticalAlignment="Bottom" Margin="0 0 0 10" Style="{DynamicResource ADD_Button}" Command="{Binding WhiteBirkiInFile}" Background="BlueViolet">
             <StackPanel Orientation="Horizontal">
                 <materialDesign:PackIcon Kind="GetApp" Foreground="White" Height="25" Width="25"/>
                 <TextBlock Text="Записать бирки в файл" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="White" FontWeight="Bold" FontSize="16"/>

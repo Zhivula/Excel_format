@@ -46,5 +46,89 @@ namespace ZHIVULA.Properties {
                 this["Width"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int CountWidth {
+            get {
+                return ((int)(this["CountWidth"]));
+            }
+            set {
+                this["CountWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string FontName {
+            get {
+                return ((string)(this["FontName"]));
+            }
+            set {
+                this["FontName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Position_1 {
+            get {
+                return ((int)(this["Position_1"]));
+            }
+            set {
+                this["Position_1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Position_2 {
+            get {
+                return ((int)(this["Position_2"]));
+            }
+            set {
+                this["Position_2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Position_3 {
+            get {
+                return ((int)(this["Position_3"]));
+            }
+            set {
+                this["Position_3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Position_4 {
+            get {
+                return ((int)(this["Position_4"]));
+            }
+            set {
+                this["Position_4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Position_5 {
+            get {
+                return ((int)(this["Position_5"]));
+            }
+            set {
+                this["Position_5"] = value;
+            }
+        }
     }
 }

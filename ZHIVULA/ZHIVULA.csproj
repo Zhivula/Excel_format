@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.props')" />
   <Import Project="..\packages\EntityFramework.6.5.0\build\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.0\build\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -40,10 +41,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=3.0.0.0, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.3.0.0\lib\net462\MaterialDesignColors.dll</HintPath>
@@ -56,7 +57,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+      <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.122\lib\net462\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -79,10 +80,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataBase\Cell_1.cs" />
-    <Compile Include="DataBase\Cell_2.cs" />
-    <Compile Include="DataBase\MyDbContext.cs" />
+    <Compile Include="Data\Block_1.cs" />
+    <Compile Include="Data\Block_2.cs" />
     <Compile Include="Data\IBlockViewModel.cs" />
+    <Compile Include="Data\Room.cs" />
     <Compile Include="Model\Block_1_Model.cs" />
     <Compile Include="Model\Block_2_Model.cs" />
     <Compile Include="ViewModel\Block_1_ViewModel.cs" />
@@ -181,7 +182,10 @@
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.0\build\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.0\build\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.targets'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.5.0\build\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.0\build\build\EntityFramework.targets')" />
   <Import Project="..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.0\build\build\net6.0\EntityFramework.targets')" />
+  <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
 </Project>
